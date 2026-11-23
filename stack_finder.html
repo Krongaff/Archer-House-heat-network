@@ -1,3 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archer House — My Flat Stack &amp; Roofspace Valve Finder</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0f17; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; padding: 14px; display: flex; flex-direction: column; align-items: center; }
+  .wrap { max-width: 780px; width: 100%; }
+  .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  h1 { font-size: 17px; color: #fff; }
+  .sub { font-size: 12px; color: #94a3b8; }
+  button { padding: 7px 12px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #cbd5e1; cursor: pointer; font-weight: 600; font-size: 12px; }
+  button:hover { background: #334155; }
+  .picker { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 12px; margin-bottom: 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .picker label { font-size: 13px; font-weight: 600; color: #7dd3fc; }
+  input, select { padding: 8px 11px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 14px; }
+  input { width: 140px; }
+  select { flex: 1; min-width: 210px; }
+  .elevation { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 14px; }
+  .roof-cap { background: #0f172a; border: 1.5px dashed #38bdf8; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  .roof-cap h2 { font-size: 14px; color: #7dd3fc; margin-bottom: 4px; }
+  .status { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-bottom: 6px; }
+  .ok { background: #065f46; color: #6ee7b7; }
+  .todo { background: #7f1d1d; color: #fca5a5; }
+  .v-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .pill { background: #1e293b; border: 1px solid #475569; padding: 4px 8px; border-radius: 4px; font-size: 11px; color: #fde68a; }
+  .floor-box { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #1e293b; border-radius: 6px; margin-bottom: 6px; border-left: 4px solid #475569; font-size: 13px; }
+  .floor-box.mine { background: #064e3b; border-left-color: #10b981; color: #fff; font-weight: 700; }
+  .flr-lbl { font-size: 11px; color: #94a3b8; min-width: 85px; }
+  .floor-box.mine .flr-lbl { color: #a7f3d0; }
+  .note-box { margin-top: 10px; font-size: 12.5px; color: #cbd5e1; background: #1e293b; padding: 10px 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>ARCHER HOUSE — MY FLAT STACK &amp; VALVE FINDER</h1>
+      <div class="sub">Enter your flat number to see your vertical stack &amp; top-floor roofspace valves</div>
+    </div>
+    <button onclick="window.location.href='index.html'">← Main Plant</button>
+  </div>
+
+  <div class="picker">
+    <label for="flatIn">Your Flat #:</label>
+    <input type="text" id="flatIn" placeholder="e.g. 72, 16, 40" oninput="findByNumber()">
+    <select id="stackSel" onchange="renderStack(this.selectedIndex)"></select>
+  </div>
+
+  <div class="elevation" id="elevView"></div>
+</div>
+
+<script>
+const data = new Array(
+  { wing: "East Wing", roof: "Flat 72 Roofspace (Surveyed Blueprint)", mapped: true,
+    f4: "Flat 72 (Duplex Upper)", f3: "Flats 70, 71 & 72 (Entrance)", f2: "Flats 21 & 22", f1: "Flat 16", f0: "Flat 12",
+    valves: new Array("IV72H/i/J (Flat 72 Tanks)", "IV72K/L/M (Kitchens 72-71-22-16-12)", "IV72C-G (Bathrooms)", "IV72N/P (71 Bed)", "IV72A/B (73 Beds)"),
+    note: "Blueprint complete: All 18 valves traced and ready for physical brass tagging." },
+  { wing: "East Wing (NW Corner)", roof: "Flat 68 Roofspace", mapped: false,
+    f4: "Flat 68", f3: "Flat 69 (+ Lift 2 Lobby)", f2: "Flat 20", f1: "Flat 15", f0: "Flat 11A (+ Bin Store)",
+    valves: new Array("IV68 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Ground floor includes Bin Store; corner stack served via Flat 68 roofspace." },
+  { wing: "East Wing", roof: "Flat 73 Roofspace", mapped: false,
+    f4: "Flat 73 (Duplex Upper)", f3: "Flats 73 (Entrance) & 74", f2: "Flat 32", f1: "Flat 17", f0: "Flat 23",
+    valves: new Array("IV73 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "3rd-floor duplex straddles 2nd-floor Flat 32; bedroom drops partly isolated in Flat 72 roofspace." },
+  { wing: "East Wing", roof: "Flat 78 Roofspace", mapped: false,
+    f4: "Flat 78", f3: "Flat 75", f2: "Flat 33", f1: "Flat 26", f0: "Flats 24 & 25",
+    valves: new Array("IV78 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Ground floor splits into two units (Flats 24 & 25) beneath Flat 26." },
+  { wing: "East Wing (NE Corner)", roof: "Flat 77 Roofspace (+ Roof Tank Room)", mapped: false,
+    f4: "Flat 77 (+ Tank Room)", f3: "Flat 76 (+ Lift 3 Lobby)", f2: "Flat 34", f1: "Flats 27 & 28", f0: "Flat 25A (+ Bin Store)",
+    valves: new Array("IV77 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Adjacent to NE Roofspace Tank Room; 1st floor splits into Flats 27 & 28." },
+  { wing: "South Wing", roof: "Flat 80 Roofspace", mapped: false,
+    f4: "Flat 80 (Duplex Upper)", f3: "Flats 79 & 80 (Entrance)", f2: "Flat 35", f1: "Flat 29", f0: "Flat 25B (+ Launderette)",
+    valves: new Array("IV80 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Ground-floor Flat 25B sits adjacent to the Launderette and Lift 3." },
+  { wing: "South Wing (Over Boiler Rm)", roof: "Flat 83 Roofspace", mapped: false,
+    f4: "Flat 83 (Duplex Upper)", f3: "Flats 81, 82 & 83 (Entrance)", f2: "Flat 36", f1: "Flats 30 & 31", f0: "Boiler Room & Pump Room (No Flats)",
+    valves: new Array("IV83 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Layout shift: Riser drops terminate at 1st floor above the basement Boiler & Pump Rooms." },
+  { wing: "South Wing (Over Gas Rm)", roof: "Flat 84 Roofspace", mapped: false,
+    f4: "Flat 84 (Duplex Upper)", f3: "Flats 84 (Entrance) & 85", f2: "Flat 37", f1: "Flat 40", f0: "Gas Meter Room (No Flats)",
+    valves: new Array("IV84 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Layout shift: Ground floor houses the Gas Meter Room directly beneath Flat 40." },
+  { wing: "South Wing", roof: "Flat 86 Roofspace", mapped: false,
+    f4: "Flat 86 (Duplex Upper)", f3: "Flats 86 (Entrance) & 87", f2: "Flats 45 & 46", f1: "Flat 41", f0: "Flat 38C",
+    valves: new Array("IV86 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "2nd floor divides into Flats 45 & 46 above Flat 41 and Flat 38C." },
+  { wing: "South Wing (SE Corner)", roof: "Flat 88 Roofspace", mapped: false,
+    f4: "Flat 88 (Duplex Upper)", f3: "Flats 88 & 89 (+ Lift 4)", f2: "Flat 47", f1: "Flat 42", f0: "Flats 38A & 38B (+ Bin Store)",
+    valves: new Array("IV88 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "SE Corner stairwell stack; ground floor splits into Flats 38A & 38B." },
+  { wing: "South-East Corner", roof: "Flat 51 Roofspace", mapped: false,
+    f4: "Flat 51", f3: "Flat 52", f2: "Flat 48", f1: "Flat 43", f0: "Flat 38",
+    valves: new Array("IV51 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Clean 5-flat corner stack (51 → 52 → 48 → 43 → 38)." },
+  { wing: "West Wing (Vicarage Cres.)", roof: "Flat 55 Roofspace", mapped: false,
+    f4: "Flat 55 (Duplex Upper)", f3: "Flats 53 & 55 (Entrance)", f2: "Flat 49", f1: "Flat 44", f0: "Flat 39 (Resident Porter)",
+    valves: new Array("IV55 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Ground-floor Flat 39 is the Resident Porter's apartment." },
+  { wing: "West Wing (Vicarage Cres.)", roof: "Flat 56 Roofspace", mapped: false,
+    f4: "Flat 56 (Duplex Upper)", f3: "Flats 54 & 56 (Entrance)", f2: "Flat 50", f1: "Flat 3 (SW Corner)", f0: "Flat 1 (SW Corner)",
+    valves: new Array("IV56 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Quadrant numbering boundary between SE Corner (50) and SW Corner (3, 1)." },
+  { wing: "West Wing (SW Corner)", roof: "Flat 58 Roofspace", mapped: false,
+    f4: "Flat 58 (Duplex Upper)", f3: "Flats 57 & 58 (Entrance)", f2: "Flats 6 & 7", f1: "Flat 3", f0: "Flat 1A",
+    valves: new Array("IV58 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "SW Corner stack; 2nd floor splits into Flats 6 & 7." },
+  { wing: "North Wing (SW Corner)", roof: "Flat 59 Roofspace", mapped: false,
+    f4: "Flat 59", f3: "Flat 60 (+ Lift 1 Lobby)", f2: "Flats 8 & 9", f1: "Flat 4", f0: "Flat 2 (+ Bin Store)",
+    valves: new Array("IV59 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "SW Corner stairwell stack above Lift 1 Motor Room & Bin Store." },
+  { wing: "North Wing", roof: "Flat 63 Roofspace", mapped: false,
+    f4: "Flat 63 (Duplex Upper)", f3: "Flats 61, 62 & 63 (Entrance)", f2: "Flat 18", f1: "Flat 5", f0: "Flat 10",
+    valves: new Array("IV63 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Quadrant numbering shifts from SW Corner (5) to NW Corner (18, 10)." },
+  { wing: "North Wing", roof: "Flat 66 Roofspace", mapped: false,
+    f4: "Flat 66 (Duplex Upper)", f3: "Flats 64, 65 & 66 (Entrance)", f2: "Flat 19", f1: "Flats 13 & 14", f0: "Flat 11",
+    valves: new Array("IV66 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "1st floor splits into Flats 13 & 14 above Ground-floor Flat 11." },
+  { wing: "North Wing (NW Corner)", roof: "Flat 67 Roofspace (+ Roof Tank Room)", mapped: false,
+    f4: "Flat 67 (+ Tank Room)", f3: "Flat 69 (NW Corner)", f2: "Flat 20", f1: "Flat 15", f0: "Flat 11A (+ EIR)",
+    valves: new Array("IV67 ?? (Unlabelled — Survey & Brass Tags Needed)"),
+    note: "Adjacent to NW Roofspace Tank Room; shares lower corner stack with Flat 68." }
 );
 
 const sel = document.getElementById('stackSel');
