@@ -1,157 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Archer House — Plumber's Stack &amp; Valve Tagging Roadmap</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #0b0f17; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; padding: 14px; }
-  .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-  h1 { font-size: 17px; color: #fff; }
-  .sub { font-size: 12px; color: #94a3b8; }
-  button { padding: 8px 12px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #cbd5e1; cursor: pointer; font-weight: 600; font-size: 12px; }
-  button:hover { background: #334155; }
-  .roadmap { background: #111827; border: 1px solid #1f2937; border-left: 4px solid #38bdf8; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; }
-  .roadmap h2 { font-size: 13.5px; color: #7dd3fc; margin-bottom: 6px; }
-  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; font-size: 12px; color: #cbd5e1; }
-  .step-box { background: #1e293b; padding: 8px 10px; border-radius: 6px; }
-  .step-box strong { color: #38bdf8; display: block; margin-bottom: 2px; }
-  .search-bar { margin-bottom: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
-  .search-bar input { flex: 1; min-width: 220px; padding: 9px 12px; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #fff; font-size: 13.5px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
-  .stack-card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 12px; }
-  .stack-card.match { border-color: #10b981; box-shadow: 0 0 0 1px #10b981; }
-  .stack-card h3 { font-size: 14.5px; color: #fff; margin-bottom: 5px; }
-  .badge { display: inline-block; font-size: 10.5px; padding: 3px 8px; border-radius: 4px; margin-bottom: 10px; font-weight: 700; }
-  .mapped { background: #065f46; color: #6ee7b7; }
-  .unmapped { background: #7f1d1d; color: #fca5a5; }
-  .flat-row { padding: 6px 10px; background: #1e293b; border-radius: 5px; margin-bottom: 4px; font-size: 12px; border-left: 3px solid #475569; }
-  .flat-row.top { border-left-color: #38bdf8; font-weight: 600; }
-  .flat-row.hl { background: #064e3b; border-left-color: #10b981; color: #fff; font-weight: 700; }
-  table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11.5px; }
-  th, td { text-align: left; padding: 6px 5px; border-bottom: 1px solid #1f2937; }
-  th { color: #94a3b8; }
-  .vtag { font-weight: 700; color: #fbbf24; }
-  .vtag.todo { color: #f87171; }
-</style>
-</head>
-<body>
-  <div class="top">
-    <div>
-      <h1>ARCHER HOUSE — PLUMBER'S STACK &amp; VALVE TAGGING ROADMAP</h1>
-      <div class="sub">Mobile Roofspace Isolation Guide &amp; 18-Roofspace Brass Tagging Rollout Plan</div>
-    </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;">
-      <button onclick="window.location.href='index.html'">← Main Plant &amp; Roofspace</button>
-      <button onclick="window.location.href='valve_labelling_pitch.html'">5-Floor Stack Demo</button>
-    </div>
-  </div>
-
-  <div class="roadmap">
-    <h2>4-Step Rollout Plan to Label All 18 Top-Floor Roofspaces</h2>
-    <div class="steps">
-      <div class="step-box"><strong>1. Start with Flat 72 Blueprint</strong>All 18 valves in Flat 72's roofspace are already traced (IV72A–IV72S) and ready for brass tags.</div>
-      <div class="step-box"><strong>2. Stamp Brass Valve Tags</strong>Pre-stamp durable brass discs with the top-floor flat prefix (e.g. IV72A, IV68A) before entering the loft.</div>
-      <div class="step-box"><strong>3. Match &amp; Clip On-Site</strong>Use this mobile guide inside each roofspace to verify the drop pipes and wire-tie each tag onto its valve.</div>
-      <div class="step-box"><strong>4. Update GitHub Register</strong>Log each completed roofspace in this online lookup so future TRV or leak repairs take minutes.</div>
-    </div>
-  </div>
-
-  <div class="search-bar">
-    <input type="text" id="flatSearch" placeholder="Type a flat number to find its roofspace &amp; valves (e.g. 72, 71, 22, 16, 12, 68)..." oninput="renderStacks()">
-  </div>
-
-  <div class="grid" id="stacksContainer"></div>
-
-<script>
-const stacks = new Array(
-  {
-    name: "Stack 1 — Flat 72 Roofspace Group (Digital Blueprint Complete)",
-    roofAccess: "Access via Top Floor Flat 72 Roofspace",
-    status: "MAPPED — READY FOR BRASS TAGGING",
-    isMapped: true,
-    flats: new Array(
-      "4th Floor: Flat 72 (Roofspace Entry & Dedicated Tanks)",
-      "3rd Floor: Flat 71 (Kitchen Drop & Bedroom Branch)",
-      "2nd Floor: Flat 22 (Kitchen Riser Drop)",
-      "1st Floor: Flat 16 (Kitchen Riser Drop)",
-      "Ground Floor: Flat 12 (Kitchen Riser Drop)"
-    ),
-    valves: new Array(
-      { zone: "Flat 72 Airing Cupboard Tanks", flw: "IV72H (DHW)", rtn: "IV72i (DHW)", cw: "IV72J" },
-      { zone: "Kitchens Stack (72, 71, 22, 16, 12)", flw: "IV72K (CH)", rtn: "IV72L (CH)", cw: "IV72M" },
-      { zone: "Bathrooms Stack (Below 72)", flw: "IV72C / IV72F", rtn: "IV72D / IV72G", cw: "IV72E" },
-      { zone: "Flat 73 Bedrooms Branch", flw: "IV72B (CH)", rtn: "IV72A (CH)", cw: "—" },
-      { zone: "Flat 71 Bedroom Branch", flw: "IV72P (CH)", rtn: "IV72N (CH)", cw: "—" },
-      { zone: "Flat 68 Adjacent Branch", flw: "IV72R (DHW)", rtn: "IV72S (DHW)", cw: "IV72Q" }
-    )
-  },
-  {
-    name: "Stack 2 — Adjacent Top-Floor Roofspace (e.g. Flat 68 / 73)",
-    roofAccess: "Access via Adjacent Top-Floor Roofspace",
-    status: "UNLABELLED — SURVEY & BRASS TAGS NEEDED",
-    isMapped: false,
-    flats: new Array(
-      "4th Floor: Top-Floor Flat [To Be Logged]",
-      "3rd Floor: Flat Below [To Be Logged]",
-      "2nd Floor: Flat Below [To Be Logged]",
-      "1st Floor: Flat Below [To Be Logged]",
-      "Ground Floor: Flat Below [To Be Logged]"
-    ),
-    valves: new Array(
-      { zone: "CH Radiator Drops", flw: "IV ?? (Untagged)", rtn: "IV ?? (Untagged)", cw: "—" },
-      { zone: "DHW Tank Coil Drops", flw: "IV ?? (Untagged)", rtn: "IV ?? (Untagged)", cw: "IV ??" }
-    )
-  },
-  {
-    name: "Stacks 3 to 18 — Remaining Top-Floor Roofspaces",
-    roofAccess: "Access via Remaining 16 Top-Floor Roofspaces",
-    status: "UNLABELLED — SURVEY & BRASS TAGS NEEDED",
-    isMapped: false,
-    flats: new Array(
-      "4th Floor: 16 Remaining Top-Floor Flats",
-      "3rd Floor: Corresponding Stack Flats",
-      "2nd Floor: Corresponding Stack Flats",
-      "1st Floor: Corresponding Stack Flats",
-      "Ground Floor: Corresponding Stack Flats"
-    ),
-    valves: new Array(
-      { zone: "All CH & DHW Vertical Drops", flw: "IV ?? (Untagged)", rtn: "IV ?? (Untagged)", cw: "IV ??" }
-    )
-  }
 );
 
-function renderStacks() {
-  const q = document.getElementById('flatSearch').value.trim().toLowerCase();
-  const cont = document.getElementById('stacksContainer');
-  cont.innerHTML = '';
+const sel = document.getElementById('stackSel');
+data.forEach(function(s, i) {
+  const opt = document.createElement('option');
+  opt.text = (i + 1) + '. ' + s.roof + ' (' + s.wing + ')';
+  sel.appendChild(opt);
+});
 
-  stacks.forEach(function(st) {
-    let hasMatch = false;
-    let flatHtml = '';
-    st.flats.forEach(function(f, idx) {
-      const hit = q.length > 0 && f.toLowerCase().includes(q);
-      if (hit) hasMatch = true;
-      flatHtml += '<div class="flat-row' + (idx === 0 ? ' top' : '') + (hit ? ' hl' : '') + '">' + f + '</div>';
-    });
-
-    let valHtml = '';
-    st.valves.forEach(function(v) {
-      const cls = st.isMapped ? 'vtag' : 'vtag todo';
-      valHtml += '<tr><td>' + v.zone + '</td><td class="' + cls + '">' + v.flw + '</td><td class="' + cls + '">' + v.rtn + '</td><td class="' + cls + '">' + v.cw + '</td></tr>';
-    });
-
-    cont.innerHTML += '<div class="stack-card' + (hasMatch ? ' match' : '') + '">' +
-      '<h3>' + st.name + '</h3>' +
-      '<div class="badge ' + (st.isMapped ? 'mapped' : 'unmapped') + '">' + st.roofAccess + ' • ' + st.status + '</div>' +
-      flatHtml +
-      '<table><tr><th>Circuit / Drop</th><th>Flow IV</th><th>Return IV</th><th>CW IV</th></tr>' + valHtml + '</table>' +
-    '</div>';
-  });
+function findByNumber() {
+  const raw = document.getElementById('flatIn').value.trim().toLowerCase();
+  if (!raw) { renderStack(sel.selectedIndex, null); return; }
+  const rx = new RegExp('\\b' + raw.replace(/[^a-z0-9]/g, '') + '\\b', 'i');
+  for (let i = 0; i < data.length; i++) {
+    const s = data.at(i);
+    const all = s.f4 + ' ' + s.f3 + ' ' + s.f2 + ' ' + s.f1 + ' ' + s.f0;
+    if (rx.test(all)) {
+      sel.selectedIndex = i;
+      renderStack(i, rx);
+      return;
+    }
+  }
 }
 
-renderStacks();
+function renderStack(idx, rx) {
+  const s = data.at(idx);
+  const rows = new Array(
+    new Array("4th Floor", s.f4),
+    new Array("3rd Floor", s.f3),
+    new Array("2nd Floor", s.f2),
+    new Array("1st Floor", s.f1),
+    new Array("Ground", s.f0)
+  );
+  let html = '<div class="roof-cap">' +
+    '<span class="status ' + (s.mapped ? 'ok' : 'todo') + '">' + (s.mapped ? 'DIGITAL BLUEPRINT COMPLETE — READY FOR BRASS TAGS' : 'UNLABELLED ROOFSPACE — SURVEY & BRASS TAGS NEEDED') + '</span>' +
+    '<h2>' + s.roof + ' — ' + s.wing + '</h2>' +
+    '<div class="v-pills">' + s.valves.map(function(v) { return '<span class="pill">' + v + '</span>'; }).join('') + '</div>' +
+  '</div>';
+
+  rows.forEach(function(r) {
+    const hit = rx && rx.test(r.at(1));
+    html += '<div class="floor-box' + (hit ? ' mine' : '') + '">' +
+      '<span class="flr-lbl">' + r.at(0) + '</span>' +
+      '<span>' + r.at(1) + (hit ? '  ← YOUR FLAT' : '') + '</span>' +
+    '</div>';
+  });
+
+  html += '<div class="note-box"><strong>Stack &amp; Layout Note:</strong> ' + s.note + '</div>';
+  document.getElementById('elevView').innerHTML = html;
+}
+
+renderStack(0, null);
 </script>
 </body>
 </html>
