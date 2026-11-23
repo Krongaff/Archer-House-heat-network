@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Archer House — Why Roofspace Valve Labelling Matters</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0f17; color: #f1f5f9; font-family: system-ui, sans-serif; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; padding: 10px 16px; gap: 8px; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .badge { background: #b45309; color: #fde68a; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; margin-right: 8px; }
+  h1 { font-size: 17px; display: inline; vertical-align: middle; }
+  .btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  button { padding: 7px 12px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #cbd5e1; cursor: pointer; font-weight: 600; font-size: 12px; }
+  button:hover { background: #334155; }
+  button.act-bad { background: #dc2626; border-color: #f87171; color: #fff; }
+  button.act-ok { background: #059669; border-color: #10b981; color: #fff; }
+  .svg-wrap { flex: 1; min-height: 0; display: flex; justify-content: center; align-items: center; }
+  svg { width: 100%; height: 100%; background: #111827; border: 1px solid #1f2937; border-radius: 8px; }
+  .pipe { fill: none; stroke: #263042; stroke-width: 7; stroke-linecap: round; }
+  .flow { fill: none; stroke-width: 3.5; stroke-dasharray: 9 7; stroke-linecap: round; }
+  .flw { stroke: #f97316; } .rtn { stroke: #3b82f6; }
+  text { font-family: sans-serif; fill: #e2e8f0; font-size: 11px; font-weight: 600; }
+  .sm { fill: #94a3b8; font-size: 9.5px; font-weight: 400; }
+  #msg { background: #1e293b; border-left: 4px solid #f59e0b; padding: 9px 14px; border-radius: 6px; font-size: 13px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="top-bar">
+    <div>
+      <span class="badge">Residents &amp; Managing Agent Proposal</span>
+      <h1>Archer House: Why All 18 Top-Floor Roofspaces Need Surveyed &amp; Labelled Valves</h1>
+    </div>
+    <div class="btns">
+      <button onclick="window.location.href='index.html'">← Main Plant</button>
+      <button id="b0" class="act-bad" onclick="setScen(0)">1. Current State (Unlabelled)</button>
+      <button id="b1" onclick="setScen(1)">2. Emergency / TRV Work Without Labels</button>
+      <button id="b2" onclick="setScen(2)">3. Tagged &amp; Mapped (Surgical Isolation)</button>
+    </div>
+  </div>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 920 425" preserveAspectRatio="xMidYMid meet">
+      <rect x="20" y="14" width="880" height="82" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-dasharray="5 3"/>
+      <text x="460" y="30" text-anchor="middle" fill="#7dd3fc">TOP FLOOR (4TH) ROOFSPACE — 18 ROOFSPACES ACROSS ARCHER HOUSE</text>
+
+      <line x1="40" y1="50" x2="880" y2="50" class="pipe"/><line x1="40" y1="50" x2="880" y2="50" class="flow flw"/>
+      <line x1="40" y1="72" x2="880" y2="72" class="pipe"/><line x1="40" y1="72" x2="880" y2="72" class="flow rtn"/>
+
+      <line x1="215" y1="50" x2="215" y2="405" class="pipe"/><line id="d1f" x1="215" y1="50" x2="215" y2="405" class="flow flw"/>
+      <line x1="240" y1="72" x2="240" y2="405" class="pipe"/><line id="d1r" x1="240" y1="72" x2="240" y2="405" class="flow rtn"/>
+
+      <line x1="460" y1="50" x2="460" y2="405" class="pipe"/><line id="d2f" x1="460" y1="50" x2="460" y2="405" class="flow flw"/>
+      <line x1="485" y1="72" x2="485" y2="405" class="pipe"/><line id="d2r" x1="485" y1="72" x2="485" y2="405" class="flow rtn"/>
+
+      <line x1="705" y1="50" x2="705" y2="405" class="pipe"/><line id="d3f" x1="705" y1="50" x2="705" y2="405" class="flow flw"/>
+      <line x1="730" y1="72" x2="730" y2="405" class="pipe"/><line id="d3r" x1="730" y1="72" x2="730" y2="405" class="flow rtn"/>
+
+      <rect id="v1Box" x="196" y="80" width="64" height="18" rx="3" fill="#dc2626"/><text id="v1Txt" x="228" y="92" text-anchor="middle" font-size="9">IV ?? / ??</text>
+      <rect id="v2Box" x="441" y="80" width="64" height="18" rx="3" fill="#dc2626"/><text id="v2Txt" x="473" y="92" text-anchor="middle" font-size="9">IV ?? / ??</text>
+      <rect id="v3Box" x="686" y="80" width="64" height="18" rx="3" fill="#dc2626"/><text id="v3Txt" x="718" y="92" text-anchor="middle" font-size="9">IV ?? / ??</text>
+
+      <g id="floors"></g>
+
+      <circle id="alertDot" cx="472" cy="316" r="14" fill="#ef4444" opacity="0"/>
+      <text id="alertTxt" x="575" y="320" fill="#fca5a5" opacity="0">← TRV Upgrade / Leak on 1st Floor</text>
+    </svg>
+  </div>
+
+  <div id="msg"></div>
+
+<script>
+const floorNames = new Array("4th Floor (Roof Access)", "3rd Floor Flat", "2nd Floor Flat", "1st Floor Flat", "Ground Floor Flat");
+const col1 = new Array("Bed 1 Rad", "Bed 1 Rad", "Bed 1 Rad", "Bed 1 Rad", "Bed 1 Rad");
+const col2 = new Array("Kitchen Rad", "Living/Hall Rad (Layout Shift)", "Kitchen Rad", "Kitchen Rad (TRV Target)", "Hallway Rad (Layout Shift)");
+const col3 = new Array("Bathroom Rad", "Bathroom Rad", "Bathroom Rad", "Bathroom Rad", "Bathroom Rad");
+
+const fg = document.getElementById('floors');
+for (let i = 0; i < 5; i++) {
+  const y = 112 + i * 58;
+  fg.innerHTML += '<rect x="30" y="' + y + '" width="860" height="48" rx="5" fill="#1e293b" opacity="0.7" stroke="#334155"/>' +
+    '<text x="46" y="' + (y + 28) + '" fill="#cbd5e1">' + floorNames.at(i) + '</text>' +
+    '<text x="227" y="' + (y + 28) + '" text-anchor="middle" class="sm">' + col1.at(i) + '</text>' +
+    '<text x="472" y="' + (y + 28) + '" text-anchor="middle" class="sm" fill="#fde68a">' + col2.at(i) + '</text>' +
+    '<text x="717" y="' + (y + 28) + '" text-anchor="middle" class="sm">' + col3.at(i) + '</text>';
+}
+
+let off = 0;
+const texts = new Array(
+  "<strong>1. Current Reality (Unlabelled Roofspace Valves):</strong> Across all 18 top-floor roofspaces, isolating valves have no tags or schematic keys. Worse, because internal room layouts shift between floors, a single vertical drop can feed a kitchen on one floor and a hallway or living room on another.",
+  "<strong>2. Problem During TRV Fitting or a Leak:</strong> If a resident wants to fit Thermostatic Radiator Valves (TRVs) on the 1st floor—or a valve leaks—engineers cannot tell which roofspace valve controls that pipe. They either shut off valves by trial-and-error or drain down an entire wing of 25+ flats.",
+  "<strong>3. Solution (Full Roofspace Survey &amp; Brass Valve Tagging):</strong> Tagging every valve across all 18 roofspaces (matching the Flat 72 survey) allows engineers to isolate <strong>only the single 5-flat drop</strong> needed for TRV installation or repairs in minutes—zero guesswork and minimal resident disruption."
+);
+
+function setScen(s) {
+  document.getElementById('b0').className = (s === 0) ? 'act-bad' : '';
+  document.getElementById('b1').className = (s === 1) ? 'act-bad' : '';
+  document.getElementById('b2').className = (s === 2) ? 'act-ok' : '';
+  document.getElementById('msg').innerHTML = texts.at(s);
+  document.getElementById('msg').style.borderLeftColor = (s === 2) ? '#10b981' : '#f59e0b';
+
+  const alertOp = (s >= 1) ? '1' : '0';
+  document.getElementById('alertDot').setAttribute('opacity', alertOp);
+  document.getElementById('alertTxt').setAttribute('opacity', alertOp);
+
+  let d1 = '1', d2 = '1', d3 = '1';
+  if (s === 0) {
+    document.getElementById('v1Box').setAttribute('fill', '#dc2626'); document.getElementById('v1Txt').textContent = 'IV ?? / ??';
+    document.getElementById('v2Box').setAttribute('fill', '#dc2626'); document.getElementById('v2Txt').textContent = 'IV ?? / ??';
+    document.getElementById('v3Box').setAttribute('fill', '#dc2626'); document.getElementById('v3Txt').textContent = 'IV ?? / ??';
+  } else if (s === 1) {
+    d1 = '0.12'; d2 = '0.12'; d3 = '0.12';
+    document.getElementById('v1Box').setAttribute('fill', '#991b1b'); document.getElementById('v1Txt').textContent = 'ALL SHUT!';
+    document.getElementById('v2Box').setAttribute('fill', '#991b1b'); document.getElementById('v2Txt').textContent = 'ALL SHUT!';
+    document.getElementById('v3Box').setAttribute('fill', '#991b1b'); document.getElementById('v3Txt').textContent = 'ALL SHUT!';
+  } else {
+    d2 = '0.12';
+    document.getElementById('v1Box').setAttribute('fill', '#059669'); document.getElementById('v1Txt').textContent = 'IV-BEDS (ON)';
+    document.getElementById('v2Box').setAttribute('fill', '#d97706'); document.getElementById('v2Txt').textContent = 'IV-KITCH (OFF)';
+    document.getElementById('v3Box').setAttribute('fill', '#059669'); document.getElementById('v3Txt').textContent = 'IV-BATH (ON)';
+  }
+  document.getElementById('d1f').style.opacity = d1; document.getElementById('d1r').style.opacity = d1;
+  document.getElementById('d2f').style.opacity = d2; document.getElementById('d2r').style.opacity = d2;
+  document.getElementById('d3f').style.opacity = d3; document.getElementById('d3r').style.opacity = d3;
+}
+
+function tick() {
+  off -= 0.9;
+  document.querySelectorAll('.flow').forEach(function(e) { e.setAttribute('stroke-dashoffset', off); });
+  requestAnimationFrame(tick);
+}
+setScen(0); tick();
+</script>
+</body>
+</html>

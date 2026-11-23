@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Archer House — Heat Network &amp; HIU Proposal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0f17; color: #f1f5f9; font-family: system-ui, sans-serif; }
+  header { background: #111827; border-bottom: 1px solid #1f2937; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  h1 { font-size: 15px; color: #fff; }
+  .sub { font-size: 11px; color: #94a3b8; }
+  .nav { display: flex; gap: 6px; flex-wrap: wrap; }
+  button { padding: 7px 11px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #cbd5e1; cursor: pointer; font-size: 12px; font-weight: 600; }
+  button.act { background: #059669; border-color: #10b981; color: #fff; }
+  .view { display: none; padding: 14px; max-width: 1080px; margin: 0 auto; flex-direction: column; gap: 10px; }
+  .view.active { display: flex; }
+  svg { width: 100%; background: #111827; border: 1px solid #1f2937; border-radius: 8px; }
+  .pipe { fill: none; stroke: #263042; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+  .flow { fill: none; stroke-width: 3.5; stroke-dasharray: 9 7; stroke-linecap: round; }
+  .ch-f { stroke: #f97316; } .ch-r { stroke: #22c55e; } .dhw-f { stroke: #ef4444; } .dhw-r { stroke: #3b82f6; } .cw { stroke: #06b6d4; } .prim { stroke: #eab308; } .prim-r { stroke: #a16207; }
+
+
+  .lbl { font-family: sans-serif; font-size: 10.5px; fill: #e2e8f0; font-weight: 600; }
+  .sm { font-family: sans-serif; font-size: 9px; fill: #94a3b8; }
+  .card { background: #111827; border: 1px solid #1f2937; border-left: 4px solid #10b981; border-radius: 6px; padding: 10px 14px; font-size: 13px; line-height: 1.45; }
+  .roof-wrap { display: flex; gap: 12px; flex-wrap: wrap; }
+  .roof-svg { flex: 1; min-width: 310px; }
+  .roof-side { width: 290px; background: #111827; border: 1px solid #1f2937; border-radius: 8px; display: flex; flex-direction: column; max-height: 440px; }
+  #ivInfo { padding: 10px; background: #1e293b; border-bottom: 1px solid #334155; font-size: 12.5px; }
+  .iv-list { overflow-y: auto; flex: 1; padding: 5px; }
+  .iv-row { padding: 5px 8px; border-bottom: 1px solid #1f2937; font-size: 11px; cursor: pointer; display: flex; gap: 8px; }
+  .iv-row:hover, .iv-row.sel { background: #065f46; color: #fff; }
+  .iv-tag { cursor: pointer; }
+  .iv-tag rect { fill: #1e293b; stroke: #64748b; rx: 3; }
+  .iv-tag text { font-size: 8.5px; fill: #fff; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+  .iv-tag.sel rect { fill: #059669; stroke: #6ee7b7; stroke-width: 2; }
+  @media (max-width: 760px) { .roof-side { width: 100%; max-height: 220px; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>ARCHER HOUSE — HEAT NETWORK &amp; HIU PROPOSAL</h1>
+    <div class="sub">2×254kW ModuMax Mk3 Plant, Roofspace Distribution &amp; Flat 72 Pilot</div>
+  </div>
+ <div class="nav">
+  <button id="btn0" class="act" onclick="showTab(0)">1. Boiler Plant &amp; Plate HX</button>
+  <button id="btn1" onclick="showTab(1)">2. Riser &amp; Wing Layout</button>
+  <button id="btn2" onclick="showTab(2)">3. Flat 72 Roofspace IVs</button>
+  <button id="btn3" onclick="showTab(3)">4. Flat 72 HIU Upgrade</button>
+  <button style="background:#b45309;border-color:#f59e0b;color:#fff" onclick="window.location.href='valve_labelling_pitch.html'">5. Roofspace Valve Labelling Pitch →</button>
+</div>
+
+</header>
+
+<div id="tab0" class="view active">
+  <svg viewBox="0 0 920 340">
+    <rect x="20" y="20" width="420" height="300" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-dasharray="5 3"/>
+    <text x="230" y="38" text-anchor="middle" class="lbl" fill="#fbbf24">SEALED PRIMARY BOILER CIRCUIT (508 kW Active)</text>
+    <rect x="35" y="120" width="75" height="50" rx="4" fill="#1e293b" stroke="#38bdf8"/><text x="72" y="148" text-anchor="middle" class="sm" fill="#7dd3fc">Chesil Press. Unit</text>
+    <rect x="50" y="185" width="45" height="60" rx="12" fill="#7f1d1d" stroke="#ef4444"/><text x="72" y="258" text-anchor="middle" class="sm">Exp. Vessel</text>
+    <rect x="135" y="120" width="70" height="70" rx="5" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/><text x="170" y="158" text-anchor="middle" class="lbl">Boiler 1 (254kW)</text>
+    <rect x="220" y="120" width="70" height="70" rx="5" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/><text x="255" y="158" text-anchor="middle" class="lbl">Boiler 2 (254kW)</text>
+    <rect x="305" y="125" width="60" height="60" rx="5" fill="#111827" stroke="#475569" stroke-dasharray="3 3"/><text x="335" y="158" text-anchor="middle" class="sm">B3 Removed</text>
+    <path d="M170,120 L170,75 L410,75 L410,135 M255,120 L255,75" class="pipe"/><path d="M170,120 L170,75 L410,75 L410,135" class="flow prim"/>
+    <path d="M410,215 L410,285 L170,285 L170,190 M255,285 L255,190" class="pipe"/><path d="M410,215 L410,285 L170,285 L170,190" sixty three class="flow prim-r"/>
+    <rect x="410" y="115" width="40" height="115" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/><text x="430" y="246" text-anchor="middle" class="lbl" fill="#38bdf8">PLATE HX</text>
+        <rect x="470" y="20" width="430" height="300" rx="8" fill="#0f172a" stroke="#10b981" stroke-dasharray="5 3"/>
+    <text x="685" y="38" text-anchor="middle" class="lbl" fill="#6ee7b7">OPEN-VENTED BUILDING DISTRIBUTION (4 PIPES TO ROOFSPACE)</text>
+    <rect x="520" y="48" width="95" height="30" rx="4" fill="#0f172a" stroke="#38bdf8"/><text x="567" y="67" text-anchor="middle" class="sm" fill="#7dd3fc">Roof Header Tank</text>
+    <path d="M567,78 L567,130 M450,145 L530,145 M530,205 L450,205" class="pipe"/>
+    <path d="M450,145 L530,145" class="flow dhw-f"/><path d="M530,205 L450,205" class="flow ch-r"/>
+
+    <!-- Main Headers & Pumps Box -->
+    <rect x="530" y="110" width="135" height="130" rx="6" fill="#1e293b" stroke="#64748b"/>
+    <text x="597" y="168" text-anchor="middle" class="lbl">MAIN HEADERS</text>
+    <text x="597" y="183" text-anchor="middle" class="lbl">&amp; PUMPS</text>
+    <text x="597" y="200" text-anchor="middle" class="sm">(Calorifier Off)</text>
+
+    <!-- 4 Individual Pipes Exiting to Roofspace Risers -->
+    <!-- 1. CH FLW (Orange) -->
+    <path d="M665,125 L885,125" class="pipe"/><path d="M665,125 L885,125" class="flow ch-f"/>
+    <text x="775" y="116" text-anchor="middle" class="lbl" fill="#fb923c">CH FLW (Orange) →</text>
+
+    <!-- 2. CH RTN (Green) -->
+    <path d="M885,160 L665,160" class="pipe"/><path d="M885,160 L665,160" class="flow ch-r"/>
+    <text x="775" y="151" text-anchor="middle" class="lbl" fill="#4ade80">← CH RTN (Green)</text>
+
+    <!-- 3. DHW FLW (Red) -->
+    <path d="M665,195 L885,195" class="pipe"/><path d="M665,195 L885,195" class="flow dhw-f"/>
+    <text x="775" y="186" text-anchor="middle" class="lbl" fill="#f87171">DHW FLW (Red) →</text>
+
+    <!-- 4. DHW RTN (Blue) -->
+    <path d="M885,230 L665,230" class="pipe"/><path d="M885,230 L665,230" class="flow dhw-r"/>
+    <text x="775" y="221" text-anchor="middle" class="lbl" fill="#60a5fa">← DHW RTN (Blue)</text>
+  </svg>
+
+  <div class="card"><strong>Plant Room (ModuMax Mk3 Scheme 2):</strong> Two active 254 kW boilers (508 kW total) feed a central <strong>Plate Heat Exchanger</strong> separating the sealed primary loop from the open-vented building risers. With the laundrette Calorifier being decommissioned, the <strong>DHW FLW / RTN</strong> circuit acts purely as a primary loop for apartment hot water tanks—ready-made for upcycled flat HIUs.</div>
+</div>
+
+<div id="tab1" class="view">
+  <svg viewBox="0 0 920 375">
+    <text x="460" y="20" text-anchor="middle" class="lbl">ARCHER HOUSE — TAPERING ROOF HEADERS, LOOPBACKS &amp; DROP-TOP ISOLATING VALVES</text>
+
+    <!-- Left Branch (Northern Wing — Tapering Header + Far-End Loopback) -->
+    <rect x="25" y="34" width="390" height="92" rx="6" fill="#0f172a" stroke="#334155" stroke-dasharray="4 3"/>
+    <text x="220" y="49" text-anchor="middle" class="sm" fill="#6ee7b7">← BRANCH A: NORTHERN WING (Tapering Header • No Wing Valves)</text>
+    <!-- Tapering Pipe Thickness (Thick near T-split, thinner toward far end) -->
+    <line x1="250" y1="62" x2="460" y2="62" stroke="#263042" stroke-width="8"/><line x1="45" y1="62" x2="250" y2="62" stroke="#263042" stroke-width="4.5"/>
+    <line x1="250" y1="78" x2="460" y2="78" stroke="#263042" stroke-width="8"/><line x1="45" y1="78" x2="250" y2="78" stroke="#263042" stroke-width="4.5"/>
+    <line x1="250" y1="96" x2="460" y2="96" stroke="#263042" stroke-width="8"/><line x1="45" y1="96" x2="250" y2="96" stroke="#263042" stroke-width="4.5"/>
+    <line x1="250" y1="112" x2="460" y2="112" stroke="#263042" stroke-width="8"/><line x1="45" y1="112" x2="250" y2="112" stroke="#263042" stroke-width="4.5"/>
+    <!-- Far-End Loopbacks (CH Flw->Rtn & DHW Flw->Rtn) -->
+    <path d="M45,62 L35,62 L35,78 L45,78 M45,96 L35,96 L35,112 L45,112" fill="none" stroke="#94a3b8" stroke-width="3"/>
+    <text x="58" y="138" text-anchor="middle" class="sm" fill="#fde047">Far-End Loopback</text>
+
+    <!-- Animated Flows Branch A -->
+    <line x1="460" y1="62" x2="45" y2="62" class="flow ch-f"/>
+    <line x1="45" y1="78" x2="460" y2="78" class="flow ch-r"/>
+    <line x1="460" y1="96" x2="45" y2="96" class="flow dhw-f"/>
+    <line x1="45" y1="112" x2="460" y2="112" class="flow dhw-r"/>
+
+    <!-- Right Branch (Southern & Western Wings — Tapering Header + Far-End Loopback) -->
+    <rect x="505" y="34" width="390" height="92" rx="6" fill="#0f172a" stroke="#334155" stroke-dasharray="4 3"/>
+    <text x="700" y="49" text-anchor="middle" class="sm" fill="#6ee7b7">BRANCH B: SOUTH/WEST WINGS (Separate Tapering Header • No Wing Valves) →</text>
+    <line x1="460" y1="62" x2="670" y2="62" stroke="#263042" stroke-width="8"/><line x1="670" y1="62" x2="875" y2="62" stroke="#263042" stroke-width="4.5"/>
+    <line x1="460" y1="78" x2="670" y2="78" stroke="#263042" stroke-width="8"/><line x1="670" y1="78" x2="875" y2="78" stroke="#263042" stroke-width="4.5"/>
+    <line x1="460" y1="96" x2="670" y2="96" stroke="#263042" stroke-width="8"/><line x1="670" y1="96" x2="875" y2="96" stroke="#263042" stroke-width="4.5"/>
+    <line x1="460" y1="112" x2="670" y2="112" stroke="#263042" stroke-width="8"/><line x1="670" y1="112" x2="875" y2="112" stroke="#263042" stroke-width="4.5"/>
+    <path d="M875,62 L885,62 L885,78 L875,78 M875,96 L885,96 L885,112 L875,112" fill="none" stroke="#94a3b8" stroke-width="3"/>
+    <text x="862" y="138" text-anchor="middle" class="sm" fill="#fde047">Far-End Loopback</text>
+
+    <!-- Animated Flows Branch B -->
+    <line x1="460" y1="62" x2="875" y2="62" class="flow ch-f"/>
+    <line x1="875" y1="78" x2="460" y2="78" class="flow ch-r"/>
+    <line x1="460" y1="96" x2="875" y2="96" class="flow dhw-f"/>
+    <line x1="875" y1="112" x2="460" y2="112" class="flow dhw-r"/>
+
+    <!-- Central Roofspace T-Split -->
+    <rect x="430" y="54" width="60" height="65" rx="5" fill="#1e293b" stroke="#facc15" stroke-width="1.5"/>
+    <text x="460" y="133" text-anchor="middle" class="sm" fill="#fde047">ROOF T-SPLIT</text>
+
+    <!-- 4 Rising Pipes: Boiler Room -> Gas Meter Room -> Roof T-Split -->
+    <line x1="442" y1="62"  x2="442" y2="285" class="pipe"/><line x1="442" y1="285" x2="442" y2="62"  class="flow ch-f"/>
+    <line x1="454" y1="78"  x2="454" y2="285" class="pipe"/><line x1="454" y1="78"  x2="454" y2="285" class="flow ch-r"/>
+    <line x1="466" y1="96"  x2="466" y2="285" class="pipe"/><line x1="466" y1="285" x2="466" y2="96"  class="flow dhw-f"/>
+    <line x1="478" y1="112" x2="478" y2="285" class="pipe"/><line x1="478" y1="112" x2="478" y2="285" class="flow dhw-r"/>
+
+    <rect x="370" y="218" width="180" height="40" rx="5" fill="#1e293b" stroke="#f59e0b"/>
+    <text x="460" y="242" text-anchor="middle" class="lbl" fill="#fbbf24">GAS METER ROOM (Transit)</text>
+    <rect x="370" y="285" width="180" height="45" rx="6" fill="#1e293b" stroke="#10b981"/>
+    <text x="460" y="312" text-anchor="middle" class="lbl">BOILER &amp; PUMP ROOM</text>
+
+    <!-- Stack Drops with Isolating Valves ONLY at the Top of Each Drop -->
+    <line x1="170" y1="96" x2="170" y2="320" class="pipe"/><line x1="170" y1="96" x2="170" y2="320" class="flow dhw-f"/>
+    <line x1="195" y1="112" x2="195" y2="320" class="pipe"/><line x1="195" y1="320" x2="195" y2="112" class="flow dhw-r"/>
+    <rect x="152" y="148" width="60" height="18" rx="3" fill="#059669" stroke="#6ee7b7"/><text x="182" y="160" text-anchor="middle" font-size="8.5" fill="#fff">DROP IVs</text>
+    <text x="182" y="338" text-anchor="middle" class="sm">5-Flat Stack Drop</text>
+
+    <line x1="725" y1="96" x2="725" y2="320" class="pipe"/><line x1="725" y1="96" x2="725" y2="320" class="flow dhw-f"/>
+    <line x1="750" y1="112" x2="750" y2="320" class="pipe"/><line x1="750" y1="320" x2="750" y2="112" class="flow dhw-r"/>
+    <rect x="707" y="148" width="60" height="18" rx="3" fill="#059669" stroke="#6ee7b7"/><text x="737" y="160" text-anchor="middle" font-size="8.5" fill="#fff">DROP IVs</text>
+    <text x="737" y="338" text-anchor="middle" class="sm">5-Flat Stack Drop</text>
+  </svg>
+  <div class="card"><strong>Why Drop-Top Valve Labelling Is Critical:</strong> From the central roofspace T-split out to the far-end loopbacks, the tapering headers have <strong>no wing isolating valves</strong>. All isolating valves sit strictly at the top of the vertical stack drops inside the 18 top-floor roofspaces—making accurate valve tagging the only way to isolate individual stacks without draining the entire building.</div>
+</div>
+
+
+<div id="tab2" class="view">
+  <div class="roof-wrap">
+    <div class="roof-svg">
+      <svg viewBox="0 0 740 430">
+        <text x="370" y="22" text-anchor="middle" class="lbl">FLAT 72 ROOFSPACE ISOLATING VALVES (IV72A - IV72S)</text>
+        <line x1="30" y1="80"  x2="710" y2="80"  class="pipe"/><line x1="30" y1="80"  x2="710" y2="80"  class="flow cw"/><text x="370" y="71" text-anchor="middle" class="sm" fill="#22d3ee">CW FROM MAIN</text>
+        <line x1="30" y1="125" x2="710" y2="125" class="pipe"/><line x1="30" y1="125" x2="710" y2="125" class="flow ch-r"/><text x="370" y="116" text-anchor="middle" class="sm" fill="#60a5fa">CH RTN</text>
+        <line x1="30" y1="170" x2="710" y2="170" class="pipe"/><line x1="30" y1="170" x2="710" y2="170" class="flow ch-f"/><text x="370" y="161" text-anchor="middle" class="sm" fill="#fb923c">CH FLOW</text>
+        <line x1="30" y1="215" x2="710" y2="215" class="pipe"/><line x1="30" y1="215" x2="710" y2="215" class="flow dhw-r"/><text x="370" y="206" text-anchor="middle" class="sm" fill="#f472b6">DHW RTN</text>
+        <line x1="30" y1="260" x2="710" y2="260" class="pipe"/><line x1="30" y1="260" x2="710" y2="260" class="flow dhw-f"/><text x="370" y="251" text-anchor="middle" class="sm" fill="#f87171">DHW FLOW</text>
+        <path d="M85,125 L85,50 M115,170 L115,50 M210,80 L210,385 M240,170 L240,385 M270,125 L270,385" class="pipe"/>
+        <text x="240" y="405" text-anchor="middle" class="sm">Kitchens Riser</text>
+        <rect x="330" y="305" width="110" height="90" rx="6" fill="#064e3b" opacity="0.4" stroke="#10b981"/>
+        <path d="M350,260 L350,375 M385,215 L385,375 M420,80 L420,375" class="pipe"/>
+        <text x="385" y="390" text-anchor="middle" class="lbl" fill="#6ee7b7">Flat 72 TANKS</text>
+        <path d="M490,260 L490,385 M520,215 L520,385 M550,80 L550,385 M580,170 L580,385 M610,125 L610,385" class="pipe"/>
+        <text x="550" y="405" text-anchor="middle" class="sm">Bathrooms Riser</text>
+        <path d="M645,125 L645,50 M675,170 L675,50" class="pipe"/>
+        <g id="roofValves"></g>
+      </svg>
+    </div>
+    <div class="roof-side">
+      <div id="ivInfo"><strong>Click any IV72 valve</strong> to inspect.</div>
+      <div class="iv-list" id="ivList"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tab3" class="view">
+  <svg viewBox="0 0 920 340">
+    <text x="460" y="22" text-anchor="middle" class="lbl">FLAT 72 AIRING CUPBOARD — ISOLATING IV72H / IV72i / IV72J FOR UPCYCLED HIU</text>
+    <text x="150" y="64" text-anchor="middle" class="lbl" fill="#7dd3fc">ROOFSPACE ISOLATION</text>
+    <rect x="55" y="88" width="190" height="30" rx="4" fill="#0f172a" stroke="#ef4444"/><text x="150" y="107" text-anchor="middle" class="lbl" fill="#fca5a5">IV72H - DHW Flow to 72</text>
+    <rect x="55" y="130" width="190" height="30" rx="4" fill="#0f172a" stroke="#ec4899"/><text x="150" y="149" text-anchor="middle" class="lbl" fill="#f9a8d4">IV72i - DHW Rtn from 72</text>
+    <rect x="55" y="172" width="190" height="30" rx="4" fill="#0f172a" stroke="#06b6d4"/><text x="150" y="191" text-anchor="middle" class="lbl" fill="#67e8f9">IV72J - CW Mains to 72</text>
+    <text x="150" y="235" text-anchor="middle" class="sm" fill="#6ee7b7">Zero disruption to other flats</text>
+    <path d="M265,103 L380,103 L380,135 M380,220 L380,250 L265,250 M265,187 L335,187 L335,280 L485,280 L485,220" class="pipe"/>
+    <path d="M265,103 L380,103 L380,135" class="flow dhw-f"/><path d="M380,220 L380,250 L265,250" class="flow dhw-r"/><path d="M265,187 L335,187 L335,280 L485,280 L485,220" class="flow cw"/>
+    <rect x="315" y="55" width="380" height="245" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+    <text x="505" y="75" text-anchor="middle" class="lbl" fill="#6ee7b7">FLAT 72 UPCYCLED RAVENHEAT HIU (2.0 BAR)</text>
+    <rect x="335" y="90" width="85" height="26" rx="4" fill="#065f46" stroke="#34d399"/><text x="377" y="107" text-anchor="middle" class="sm" fill="#fff">2-Port Valve</text>
+    <rect x="335" y="252" width="95" height="26" rx="4" fill="#1d4ed8" stroke="#93c5fd"/><text x="382" y="269" text-anchor="middle" class="sm" fill="#fff">2.0 Bar PRV</text>
+    <rect x="445" y="135" width="65" height="85" rx="4" fill="#1e293b" stroke="#10b981"/><text x="477" y="181" text-anchor="middle" class="lbl">HX #1</text>
+    <rect x="525" y="135" width="65" height="85" rx="4" fill="#1e293b" stroke="#10b981"/><text x="557" y="181" text-anchor="middle" class="lbl">HX #2</text>
+    <rect x="605" y="135" width="65" height="85" rx="4" fill="#1e293b" stroke="#10b981"/><text x="637" y="181" text-anchor="middle" class="lbl">HX #3</text>
+    <path d="M637,135 L637,105 L745,105" class="pipe"/><path d="M637,135 L637,105 L745,105" class="flow dhw-f"/>
+    <rect x="745" y="75" width="145" height="165" rx="8" fill="#1e293b" stroke="#475569"/>
+    <text x="817" y="102" text-anchor="middle" class="lbl">FLAT 72 OUTLETS</text>
+    <text x="817" y="134" text-anchor="middle" class="sm" fill="#6ee7b7">2.0 Bar Mixer Shower</text>
+    <text x="817" y="160" text-anchor="middle" class="sm" fill="#6ee7b7">Fast Bath Fill (3x HX)</text>
+    <text x="817" y="186" text-anchor="middle" class="sm" fill="#6ee7b7">Kitchen &amp; Basin Taps</text>
+  </svg>
+  <div class="card"><strong>Zero-Disruption Pilot in Flat 72:</strong> Closing <strong>IV72H</strong>, <strong>IV72i</strong>, and <strong>IV72J</strong> isolates only Flat 72's airing cupboard tanks while leaving every other flat and riser in Archer House completely unaffected.</div>
+</div>
+
+<script>
+const iv72=[["IV72A",645,95,"CH RTN FROM FLAT 73 BEDS"],["IV72B",675,140,"CH FLOW TO FLAT 73 BEDS"],["IV72C",490,310,"DHW FLOW ISOLATER FOR BATHROOMS"],["IV72D",520,310,"DHW RTN ISOLATER FOR BATHROOMS"],["IV72E",550,100,"CW ISOLATER FOR BATHROOMS"],["IV72F",580,310,"CH FLOW ISOLATER FOR BATHROOMS"],["IV72G",610,310,"CH RTN ISOLATER FOR BATHROOMS"],["IV72H",350,345,"DHW FLOW ISOLATER FOR FLAT 72 TANKS ONLY"],["IV72i",385,345,"DHW RTN ISOLATER FOR FLAT 72 TANKS ONLY"],["IV72J",420,345,"CW ISOLATER FOR FLAT 72 TANKS ONLY"],["IV72K",240,310,"CH FLOW ISOLATER FOR KITCHENS"],["IV72L",270,310,"CH RTN ISOLATER FOR KITCHENS"],["IV72M",210,100,"CW ISOLATER FOR KITCHENS"],["IV72N",85,95,"CH RTN FROM FLAT 71 BEDROOM"],["IV72P",115,140,"CH FLOW TO FLAT 71 BEDROOM"],["IV72Q",165,80,"CW ISOLATER FOR FLAT 68"],["IV72R",165,260,"DHW FLOW ISOLATER FOR FLAT 68"],["IV72S",165,215,"DHW RTN ISOLATER FOR FLAT 68"]];
+let off=0;
+iv72.forEach(v=>{
+  const n=document.createElementNS("http://w3.org","g");
+  n.setAttribute("class","iv-tag");n.id="tag-"+v[0];n.setAttribute("transform","translate("+(v[1]-19)+","+(v[2]-8)+")");
+  n.onclick=()=>pickIV(v[0]);
+  n.innerHTML='<rect width="38" height="16"/><text x="19" y="8">'+v[0]+'</text>';
+  document.getElementById("roofValves").appendChild(n);
+  const r=document.createElement("div");r.className="iv-row";r.id="row-"+v[0];r.onclick=()=>pickIV(v[0]);
+  r.innerHTML='<strong style="color:#6ee7b7;min-width:46px">'+v[0]+'</strong><span>'+v[3]+'</span>';
+  document.getElementById("ivList").appendChild(r);
+});
+function pickIV(id){
+  document.querySelectorAll(".iv-tag,.iv-row").forEach(e=>e.classList.remove("sel"));
+  document.getElementById("tag-"+id).classList.add("sel");document.getElementById("row-"+id).classList.add("sel");
+  const v=iv72.find(x=>x[0]===id);document.getElementById("ivInfo").innerHTML='<strong style="color:#6ee7b7">'+v[0]+':</strong> '+v[3];
+}
+function showTab(i){for(let k=0;k<4;k++){document.getElementById("btn"+k).className=k===i?"act":"";document.getElementById("tab"+k).className=k===i?"view active":"view";}}
+function loop(){off-=0.9;document.querySelectorAll(".flow").forEach(e=>e.setAttribute("stroke-dashoffset",off));requestAnimationFrame(loop);}
+pickIV("IV72H");loop();
+</script>
+</body>
+</html>
