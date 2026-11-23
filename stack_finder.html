@@ -138,7 +138,7 @@ data.forEach(function(s, i) {
 function findByNumber() {
   const raw = document.getElementById('flatIn').value.trim().toLowerCase();
   if (!raw) { renderStack(sel.selectedIndex, null); return; }
-  const rx = new RegExp('\\b' + raw.replace(/[^a-z0-9]/g, '') + '\\b', 'i');
+const rx = new RegExp('(?<!Lift\\s)\\b' + raw.replace(/[^a-z0-9]/g, '') + '\\b', 'i');
   for (let i = 0; i < data.length; i++) {
     const s = data.at(i);
     const all = s.f4 + ' ' + s.f3 + ' ' + s.f2 + ' ' + s.f1 + ' ' + s.f0;
