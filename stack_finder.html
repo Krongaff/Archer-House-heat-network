@@ -161,15 +161,17 @@ function render() {
       flRows += '<div class="fl-row' + (hit ? ' match' : '') + '">' + fl + '</div>';
     });
 
-    res.innerHTML += '<div class="card">' +
+       res.innerHTML += '<div class="card">' +
       '<div class="roof-hero">' +
         '<div class="roof-kicker">Step 1: Obtain Roofspace Access Via</div>' +
         '<div class="roof-flat">' + st.roofFlat + '</div>' +
         '<span class="status-pill ' + (st.tagged ? 'ok' : 'todo') + '">' + (st.tagged ? '✓ VALVES TAGGED & MAPPED' : '⚠ VALVES UNLABELLED — SURVEY NEEDED') + '</span>' +
       '</div>' +
       '<div class="advice-box">' +
+        '<div style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.5px;color:#38bdf8;font-weight:700;margin-bottom:4px;">Step 2: Isolate Drop Valves in Roofspace</div>' +
         '<div><strong>System:</strong> ' + sysLabel + sideNote + '</div>' +
-        '<div style="margin-top:4px;"><strong>Roofspace Isolating Valves:</strong> <span class="vtag">' + valveText + '</span></div>' +
+        '<div style="margin-top:4px;"><strong>Close Valves:</strong> <span class="vtag">' + valveText + '</span></div>' +
+        '<div style="margin-top:8px;padding-top:6px;border-top:1px solid #334155;font-size:11.5px;color:#94a3b8;"><strong style="color:#cbd5e1;">Step 3:</strong> Drain down affected stack drop via lowest flat, complete work, then slowly re-open valves &amp; bleed air at top floor.</div>' +
       '</div>' +
       '<button class="toggle-btn" onclick="toggleStack(' + st.id + ')">Show / Hide Full 5-Floor Vertical Stack ▼</button>' +
       '<div class="stack-drawer' + (q ? ' open' : '') + '" id="drawer-' + st.id + '">' + flRows + '</div>' +
