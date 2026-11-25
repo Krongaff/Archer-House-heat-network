@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Archer House — Plumber's Mobile Valve Finder</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0f17; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; padding: 12px; max-width: 680px; margin: 0 auto; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
+  h1 { font-size: 16px; color: #fff; line-height: 1.25; }
+  .back-btn { padding: 8px 12px; border: 1px solid #334155; border-radius: 8px; background: #1e293b; color: #cbd5e1; font-weight: 600; font-size: 12px; white-space: nowrap; cursor: pointer; }
+
+  /* Survey Progress Banner */
+  .banner { background: #111827; border: 1px solid #1f2937; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+  .banner-top { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .bar-bg { width: 100%; height: 8px; background: #1e293b; border-radius: 99px; overflow: hidden; margin-bottom: 6px; }
+  .bar-fill { width: 5.6%; height: 100%; background: #10b981; border-radius: 99px; }
+  .banner p { font-size: 11.5px; color: #94a3b8; line-height: 1.4; }
+
+  /* Sticky Mobile Search Bar */
+  .sticky-controls { position: sticky; top: 0; z-index: 10; background: #0b0f17; padding: 6px 0 10px; }
+  .search-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  input { flex: 1; padding: 12px 14px; border-radius: 8px; border: 2px solid #38bdf8; background: #111827; color: #fff; font-size: 16px; }
+  .clear-btn { padding: 0 14px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .pills { display: flex; gap: 6px; }
+  .pill { flex: 1; padding: 8px 6px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #cbd5e1; font-size: 11.5px; font-weight: 600; text-align: center; cursor: pointer; }
+  .pill.act { background: #0284c7; border-color: #38bdf8; color: #fff; }
+
+  /* Mobile Stack Cards */
+  .list { display: flex; flex-direction: column; gap: 12px; }
+  .card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 12px; }
+  .card.hit { border-color: #38bdf8; }
+  .card-hdr { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+  .card h2 { font-size: 14.5px; color: #fff; }
+  .status { font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 4px; white-space: nowrap; }
+  .ok { background: #065f46; color: #6ee7b7; }
+  .todo { background: #7f1d1d; color: #fca5a5; }
+  .roof-line { font-size: 12px; color: #7dd3fc; font-weight: 600; margin-bottom: 8px; }
+
+  .fl-row { padding: 7px 10px; background: #1e293b; border-radius: 5px; font-size: 12.5px; margin-bottom: 4px; border-left: 3px solid #475569; }
+  .fl-row.roof { border-left-color: #38bdf8; background: #172554; }
+  .fl-row.match { background: #065f46; border-left-color: #34d399; color: #fff; font-weight: 700; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11.5px; }
+  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid #1f2937; }
+  th { color: #94a3b8; font-size: 10.5px; }
+  .vtag { font-weight: 700; color: #fbbf24; }
+  .empty { text-align: center; padding: 24px; color: #94a3b8; font-size: 13px; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <h1>ARCHER HOUSE<br><span style="font-size:12px;color:#94a3b8;font-weight:400;">Plumber's Mobile Stack &amp; Valve Finder</span></h1>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Plant Map</button>
+  </div>
+
+  <div class="banner">
+    <div class="banner-top">
+      <span style="color:#fde68a;">ROOFSPACE VALVE SURVEY PROGRESS</span>
+      <span style="color:#6ee7b7;">1 of 18 Stacks Mapped (5.6%)</span>
+    </div>
+    <div class="bar-bg"><div class="bar-fill"></div></div>
+    <p><strong>DHW Tank Loops</strong> follow single vertical risers, while <strong>CH Radiator Drops</strong> split into up to 3 pairs per stack. Physical roofspace tagging is required across the remaining 17 top-floor voids to complete this live directory.</p>
+  </div>
+
+  <div class="sticky-controls">
+    <div class="search-row">
+      <input type="text" id="q" placeholder="Enter flat # (e.g. 1, 16, 38b, 72)..." oninput="render()">
+      <button class="clear-btn" onclick="document.getElementById('q').value=''; render();">Clear</button>
+    </div>
+    <div class="pills">
+      <div id="pAll" class="pill act" onclick="setFilter('ALL')">All 18 Stacks</div>
+      <div id="pOk" class="pill" onclick="setFilter('OK')">Mapped Pilot (1)</div>
+      <div id="pTodo" class="pill" onclick="setFilter('TODO')">Needs Survey (17)</div>
+    </div>
+  </div>
+
+  <div class="list" id="grid"></div>
+  <script>
+const stacks = new Array(
+  {
+    title: "Stack 1 — SW Corner (Lift 1 West)", roof: "Access: Flat 59 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 59 (Single-Storey)", "3rd Floor: Flat 60 (Duplex Entry)", "2nd Floor: Flat 9 (by Lift 1)", "1st Floor: Flat 4 / Lift 1 Lobby", "Ground: Bin Store / Walkway (Lift 1)"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV59 ??", r: "IV59 ??", c: "IV59 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV59 ??", r: "IV59 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 2 — North Wing (West-Centre)", roof: "Access: Flat 63 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 63 (Duplex Upper)", "3rd Floor: Flat 61 & Flat 62", "2nd Floor: Flat 9 & Flat 18", "1st Floor: Flat 5", "Ground: Flat 2"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV63 ??", r: "IV63 ??", c: "IV63 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV63 ??", r: "IV63 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 3 — North Wing (East-Centre)", roof: "Access: Flat 65 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 65 (Duplex Upper)", "3rd Floor: Flat 64 & Flat 66", "2nd Floor: Flat 18 & Flat 19", "1st Floor: Flat 13 & Flat 14", "Ground: Flat 10 & Flat 11"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV65 ??", r: "IV65 ??", c: "IV65 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV65 ??", r: "IV65 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 4 — NW Corner (North Bay)", roof: "Access: Flat 67 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 67 (Single-Storey)", "3rd Floor: Flat 66 & Flat 69", "2nd Floor: Flat 19 & Flat 20", "1st Floor: Flat 14 & Flat 15", "Ground: Flat 11 & Flat 11a"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV67 ??", r: "IV67 ??", c: "IV67 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV67 ??", r: "IV67 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 5 — NW Corner (Lift 2 East)", roof: "Access: Flat 68 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 68 (Single-Storey)", "3rd Floor: Flat 69 & Flat 70", "2nd Floor: Flat 20 & Flat 21", "1st Floor: Flat 15 & Flat 16", "Ground: Flat 11a, Bin Store & Flat 12"),
+    valves: new Array(
+      { z: "Flat 68 Branch (in 72 Roof)", f: "IV72R (DHW)", r: "IV72S (DHW)", c: "IV72Q" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV68 ??", r: "IV68 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 6 — East Wing (Flat 72 Pilot)", roof: "Access: Flat 72 Roofspace (4th)", tagged: true,
+    floors: new Array("4th (Roof): Flat 72 (Duplex Upper)", "3rd Floor: Flat 70 & Flat 71", "2nd Floor: Flat 21 & Flat 22", "1st Floor: Flat 16 & Flat 17", "Ground: Flat 12 & Flat 23"),
+    valves: new Array(
+      { z: "Flat 72 Tanks Only", f: "IV72H (DHW)", r: "IV72i (DHW)", c: "IV72J" },
+      { z: "CH Kitchens (72,71,22,16,12)", f: "IV72K (CH)", r: "IV72L (CH)", c: "IV72M" },
+      { z: "CH & DHW Bathrooms", f: "IV72C / IV72F", r: "IV72D / IV72G", c: "IV72E" }
+    )
+  },
+  {
+    title: "Stack 7 — East Wing (Centre)", roof: "Access: Flat 73 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 73 (Duplex Upper)", "3rd Floor: Flat 71 & Flat 74", "2nd Floor: Flat 22 & Flat 32", "1st Floor: Flat 17 & Flat 26", "Ground: Flat 23 & Flat 24"),
+    valves: new Array(
+      { z: "Beds 73 (in 72 Roof)", f: "IV72B (CH)", r: "IV72A (CH)", c: "—" },
+      { z: "DHW & Other CH Drops", f: "IV73 ??", r: "IV73 ??", c: "IV73 ??" }
+    )
+  },
+  {
+    title: "Stack 8 — NE Corner (North Bay)", roof: "Access: Flat 78 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 78 (Single-Storey)", "3rd Floor: Flat 75 & Flat 76", "2nd Floor: Flat 32 & Flat 33", "1st Floor: Flat 26 & Flat 27", "Ground: Flat 24 & Flat 25"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV78 ??", r: "IV78 ??", c: "IV78 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV78 ??", r: "IV78 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 9 — NE Corner (Tank Room)", roof: "Access: Flat 77 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 77 (Single-Storey)", "3rd Floor: Flat 76 & Flat 79", "2nd Floor: Flat 33 & Flat 34", "1st Floor: Flat 27 & Flat 28", "Ground: Flat 25 & Flat 25a"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV77 ??", r: "IV77 ??", c: "IV77 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV77 ??", r: "IV77 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 10 — South Wing (Lift 3 East)", roof: "Access: Flat 80 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 80 (Duplex Upper)", "3rd Floor: Flat 81 (by Lift 3)", "2nd Floor: Flat 34 & Flat 35", "1st Floor: Flat 28 & Flat 29", "Ground: Lift 3 Motor, Bin Store & 25b"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV80 ??", r: "IV80 ??", c: "IV80 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV80 ??", r: "IV80 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 11 — South Wing (Over Boiler Rm)", roof: "Access: Flat 83 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 83 (Duplex Upper)", "3rd Floor: Flat 82", "2nd Floor: Flat 35 & Flat 36", "1st Floor: Flat 29 & Flat 30", "Ground: Boiler Room & Launderette"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV83 ??", r: "IV83 ??", c: "IV83 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV83 ??", r: "IV83 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 12 — South Wing (Over Pump Rm)", roof: "Access: Flat 84 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 84 (Duplex Upper)", "3rd Floor: Flat 85", "2nd Floor: Flat 36 & Flat 37", "1st Floor: Flat 30 & Flat 31", "Ground: Pump Room & Gas Meter Room"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV84 ??", r: "IV84 ??", c: "IV84 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV84 ??", r: "IV84 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 13 — South Wing (West-Centre)", roof: "Access: Flat 86 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 86 (Duplex Upper)", "3rd Floor: Flat 85 & Flat 87", "2nd Floor: Flat 37 & Flat 45", "1st Floor: Flat 31 & Flat 40", "Ground: Flat 38c & Walkway"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV86 ??", r: "IV86 ??", c: "IV86 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV86 ??", r: "IV86 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 14 — South Wing (Lift 4 East)", roof: "Access: Flat 88 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 88 (Duplex Upper)", "3rd Floor: Flat 87 & Flat 89", "2nd Floor: Flat 46 & Flat 47", "1st Floor: Flat 41 & Flat 42", "Ground: Flat 38a, 38b & Lift 4"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV88 ??", r: "IV88 ??", c: "IV88 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV88 ??", r: "IV88 ??", c: "—" }
+    )
+  },
+  {
+      {
+    title: "Stack 15 — SE Corner (Vicarage Cres)", roof: "Access: Flat 51 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 51 (Single-Storey)", "3rd Floor: Flat 52 & Flat 53", "2nd Floor: Flat 47, 48 & 49", "1st Floor: Flat 42 & Flat 43", "Ground: Flat 38, 38a & Bin Store"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV51 ??", r: "IV51 ??", c: "IV51 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV51 ??", r: "IV51 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 16 — West Wing (South Bay)", roof: "Access: Flat 55 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 55 (Duplex Upper)", "3rd Floor: Flat 53 & Flat 54", "2nd Floor: Flat 49 & Flat 50", "1st Floor: Flat 43 & Flat 44", "Ground: Flat 39 (Porter) & Entrance"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV55 ??", r: "IV55 ??", c: "IV55 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV55 ??", r: "IV55 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 17 — West Wing (North Bay)", roof: "Access: Flat 56 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 56 (Duplex Upper)", "3rd Floor: Flat 54 & Flat 57", "2nd Floor: Flat 50 & Flat 6", "1st Floor: Flat 44 & Flat 3", "Ground: Entrance Archway & Flat 1"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV56 ??", r: "IV56 ??", c: "IV56 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV56 ??", r: "IV56 ??", c: "—" }
+    )
+  },
+  {
+    title: "Stack 18 — SW Corner (South Bay)", roof: "Access: Flat 58 Roofspace (4th)", tagged: false,
+    floors: new Array("4th (Roof): Flat 58 (Duplex Upper)", "3rd Floor: Flat 58 (Duplex Entry)", "2nd Floor: Flat 7 & Flat 8", "1st Floor: Flat 3 & Flat 4", "Ground: Flat 1 & Flat 1a"),
+    valves: new Array(
+      { z: "DHW Tank Coil & CW", f: "IV58 ??", r: "IV58 ??", c: "IV58 ??" },
+      { z: "CH Rads (3 Drops TBC)", f: "IV58 ??", r: "IV58 ??", c: "—" }
+    )
+  }
+);
+
+let filterMode = 'ALL';
+
+function setFilter(mode) {
+  filterMode = mode;
+  document.getElementById('pAll').className = (mode === 'ALL') ? 'pill act' : 'pill';
+  document.getElementById('pOk').className = (mode === 'OK') ? 'pill act' : 'pill';
+  document.getElementById('pTodo').className = (mode === 'TODO') ? 'pill act' : 'pill';
+  render();
+}
+
+function render() {
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  const isFlatQuery = /^\d+[a-z]?$/.test(q);
+  const flatRegex = isFlatQuery ? new RegExp('\\b' + q + '\\b', 'i') : null;
+  let count = 0;
+
+  stacks.forEach(function(st) {
+    if (filterMode === 'OK' && !st.tagged) return;
+    if (filterMode === 'TODO' && st.tagged) return;
+
+    const cleanFloors = st.floors.map(function(f) {
+      return f.replace(/^.*?: /, '').replace(/Lift \d+/gi, '');
+    });
+
+    let stackMatched = false;
+    if (!q) {
+      stackMatched = true;
+    } else if (isFlatQuery) {
+      stackMatched = cleanFloors.some(function(cf) { return flatRegex.test(cf); });
+    } else {
+      const blob = (st.title + ' ' + st.roof + ' ' + cleanFloors.join(' ')).toLowerCase();
+      stackMatched = blob.includes(q);
+    }
+
+    if (!stackMatched) return;
+    count++;
+
+    let flHtml = '';
+    st.floors.forEach(function(fl, idx) {
+      const flatPart = cleanFloors.at(idx);
+      const isMatch = q && (isFlatQuery ? flatRegex.test(flatPart) : flatPart.toLowerCase().includes(q));
+      flHtml += '<div class="fl-row' + (idx === 0 ? ' roof' : '') + (isMatch ? ' match' : '') + '">' + fl + '</div>';
+    });
+
+    let vHtml = '';
+    st.valves.forEach(function(v) {
+      vHtml += '<tr><td>' + v.z + '</td><td class="vtag">' + v.f + '</td><td class="vtag">' + v.r + '</td><td class="vtag">' + v.c + '</td></tr>';
+    });
+
+    grid.innerHTML += '<div class="card' + (q ? ' hit' : '') + '">' +
+      '<div class="card-hdr"><h2>' + st.title + '</h2><span class="status ' + (st.tagged ? 'ok' : 'todo') + '">' + (st.tagged ? 'TAGGED PILOT' : 'NEEDS SURVEY') + '</span></div>' +
+      '<div class="roof-line">' + st.roof + '</div>' +
+      flHtml +
+      '<table><tr><th>Circuit</th><th>Flow IV</th><th>Return IV</th><th>CW IV</th></tr>' + vHtml + '</table>' +
+    '</div>';
+  });
+
+  if (count === 0) {
+    grid.innerHTML = '<div class="empty">No matching flat or stack found. Tap <strong>Clear</strong> to view all 18 stacks.</div>';
+  }
+}
+
+render();
+</script>
+</body>
+</html>
